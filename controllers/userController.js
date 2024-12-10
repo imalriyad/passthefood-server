@@ -2,7 +2,7 @@ const User = require("../models/user");
 
 const createUser = async (req, res) => {
   try {
-    const { name, email, phone, location, avatar, accountType, method } =
+    const { name, email, phone, address, avatar, accountType, method } =
       req.body;
 
     const isExist = await User.findOne({ email: email });
@@ -17,7 +17,7 @@ const createUser = async (req, res) => {
       name,
       email,
       phone,
-      location,
+      address,
       avatar,
       accountType,
       method,
@@ -36,7 +36,7 @@ const createUser = async (req, res) => {
   }
 };
 
-// Get all donation with paginations
+// Get all users with paginations
 const getAllUsers = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
@@ -53,4 +53,30 @@ const getAllUsers = async (req, res) => {
   }
 };
 
-module.exports = { createUser, getAllUsers };
+// get current loggedin user info
+const getCurrentUser = async (req, res) => {
+  try {
+    const userEmail = req.query?.email;
+
+    if (!userEmail) {
+      return res
+        .status(400)
+        .json({ error: "Email query parameter is required" });
+    }
+
+    const result = await User.findOne({ email: userEmail });
+
+    if (!result) {
+      return res.status(404).json({ error: "User not found" });
+    }
+
+    res.status(200).json(result);
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while retrieving the user" });
+  }
+};
+
+module.exports = { createUser, getAllUsers, getCurrentUser };

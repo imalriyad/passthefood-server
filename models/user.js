@@ -11,13 +11,16 @@ const userSchema = new mongoose.Schema(
       required: true,
       lowercase: true,
     },
-    phone: {
-      type: Number,
-      required: true,
-    },
-    location: {
+    password: {
       type: String,
       required: true,
+    },
+    phone: {
+      type: String,
+      required: true,
+    },
+    address: {
+      type: String,
     },
     avatar: {
       type: String,
@@ -29,7 +32,7 @@ const userSchema = new mongoose.Schema(
     method: {
       type: String,
       required: true,
-      enum: ['google', 'manual']
+      enum: ["google", "manual"],
     },
   },
   {
