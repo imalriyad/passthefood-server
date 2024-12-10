@@ -1,6 +1,7 @@
 const Donation = require("../models/donation");
 
 
+// creating new donation
 const createDonation = async (req, res) => {
   try {
  
@@ -42,4 +43,21 @@ const createDonation = async (req, res) => {
   }
 };
 
-module.exports = { createDonation };
+
+const getAllDonations = async (req, res) => {
+  try {
+    const { page = 1, limit = 10 } = req.query;
+    const donations = await Donation.find()
+                                    .skip((page - 1) * limit) 
+                                    .limit(limit); 
+
+    res.status(200).json(donations);
+  } catch (error) {
+    console.error("Error getting donations:", error);
+    res.status(500).json({ message: "Error getting donations", error: error.message });
+  }
+};
+
+
+
+module.exports = { createDonation, getAllDonations };
