@@ -5,7 +5,6 @@ const donationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-
   foodValue: {
     type: Number,
     required: true,
@@ -34,6 +33,19 @@ const donationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  donorId: {
+    type: String,
+    required: true,
+  },
+  donorName: {
+    type: String,
+    required: true,
+  },
+  donorType: {
+    type: String,
+    required: true,
+  },
+  
 });
 
 const Donation = mongoose.model("Donation", donationSchema);

@@ -14,6 +14,7 @@ const createDonation = async (req, res) => {
       foodPickupAddress,
       foodExpiryDate,
       foodRegion,
+      userId
     } = req.body;
 
 
@@ -26,11 +27,12 @@ const createDonation = async (req, res) => {
       foodPickupAddress,
       foodExpiryDate,
       foodRegion,
+      userId
     });
 
     await newDonation.save();
 
-    return res.status(201).json({
+    return res.status(200).json({
       message: "Donation created successfully",
     });
 
@@ -44,6 +46,7 @@ const createDonation = async (req, res) => {
 };
 
 
+// Get all donation with paginations
 const getAllDonations = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
