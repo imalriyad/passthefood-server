@@ -16,7 +16,10 @@ const createDonation = async (req, res) => {
       donorName,
       donorType,
       instructions,
+      donorAvatar
     } = req.body;
+
+
 
     const newDonation = new Donation({
       foodName,
@@ -31,6 +34,7 @@ const createDonation = async (req, res) => {
       donorName,
       donorType,
       instructions,
+      donorAvatar,
     });
 
     await newDonation.save();
@@ -65,4 +69,31 @@ const getAllListedFood = async (req, res) => {
   }
 };
 
-module.exports = { createDonation, getAllListedFood };
+
+// For only notifition
+const getLatestFoodNotifications = async (req, res) => {
+  try {
+    const latestFoods = await Donation.find(
+      {},
+      {
+        createdAt: 1, // Use createdAt instead of timestamp
+        donorName: 1,
+        donorAvatar: 1,
+        instructions: 1,
+        _id: 0, // Exclude the _id field
+      }
+    )
+      .sort({ createdAt: -1 }) // Sort by latest createdAt
+      .limit(5); // Limit to the latest 5
+
+    res.status(200).json(latestFoods);
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch notifications." });
+  }
+};
+
+module.exports = {
+  createDonation,
+  getAllListedFood,
+  getLatestFoodNotifications,
+};
