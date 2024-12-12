@@ -1,8 +1,9 @@
 const User = require("../models/user");
+const bcrypt = require('bcrypt');
 
 const createUser = async (req, res) => {
   try {
-    const { name, email, phone, address, avatar, accountType, method } =
+    const { name, email, phone, address, avatar, accountType, method ,password} =
       req.body;
 
     const isExist = await User.findOne({ email: email });
@@ -12,11 +13,12 @@ const createUser = async (req, res) => {
         message: "User email already exist",
       });
     }
-
+    const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
       name,
       email,
       phone,
+      password:hashedPassword,
       address,
       avatar,
       accountType,
@@ -42,7 +44,7 @@ const getAllUsers = async (req, res) => {
     const { page = 1, limit = 10 } = req.query;
     const users = await User.find()
       .skip((page - 1) * limit)
-      .limit(limit);
+      .limit(limit).select('-password');;
 
     res.status(200).json(users);
   } catch (error) {
@@ -64,7 +66,8 @@ const getCurrentUser = async (req, res) => {
         .json({ error: "Email query parameter is required" });
     }
 
-    const result = await User.findOne({ email: userEmail });
+    const result = await User.findOne({ email: userEmail }).select('-password');
+
 
     if (!result) {
       return res.status(404).json({ error: "User not found" });

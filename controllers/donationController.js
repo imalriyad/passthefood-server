@@ -12,10 +12,13 @@ const createDonation = async (req, res) => {
       foodPickupAddress,
       foodExpiryDate,
       foodRegion,
-      userId,
+      donorId,
+      donorName,
+      donorType,
+      instructions,
     } = req.body;
 
-    console.log(req.body);
+    const date = new Date(foodExpiryDate.replace(/\s*\[.*?\]$/, ""));
 
     const newDonation = new Donation({
       foodName,
@@ -24,9 +27,12 @@ const createDonation = async (req, res) => {
       foodImage,
       foodCategory,
       foodPickupAddress,
-      foodExpiryDate,
+      foodExpiryDate:date,
       foodRegion,
-      userId,
+      donorId,
+      donorName,
+      donorType,
+      instructions,
     });
 
     await newDonation.save();
