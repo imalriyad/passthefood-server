@@ -18,8 +18,6 @@ const createDonation = async (req, res) => {
       instructions,
     } = req.body;
 
-    const date = new Date(foodExpiryDate.replace(/\s*\[.*?\]$/, ""));
-
     const newDonation = new Donation({
       foodName,
       foodValue,
@@ -27,7 +25,7 @@ const createDonation = async (req, res) => {
       foodImage,
       foodCategory,
       foodPickupAddress,
-      foodExpiryDate:date,
+      foodExpiryDate,
       foodRegion,
       donorId,
       donorName,
@@ -50,9 +48,10 @@ const createDonation = async (req, res) => {
 };
 
 // Get all donation with paginations
-const getAllDonations = async (req, res) => {
+const getAllListedFood = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
+
     const donations = await Donation.find()
       .skip((page - 1) * limit)
       .limit(limit);
@@ -66,4 +65,4 @@ const getAllDonations = async (req, res) => {
   }
 };
 
-module.exports = { createDonation, getAllDonations };
+module.exports = { createDonation, getAllListedFood };

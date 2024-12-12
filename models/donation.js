@@ -26,7 +26,7 @@ const donationSchema = new mongoose.Schema({
     required: true,
   },
   foodExpiryDate: {
-    type: Date,
+    type: String,
     required: true,
   },
   foodRegion: {

@@ -1,9 +1,9 @@
 const express = require('express');
-const { createDonation,getAllDonations } = require("../controllers/donationController");
+const { createDonation,getAllListedFood } = require("../controllers/donationController");
 const router = express.Router();
 
 router.post("/create-donation", createDonation)
-router.get("/get-all-donations", getAllDonations)
+router.get("/get-all-listed-food", getAllListedFood)
 
 
 
