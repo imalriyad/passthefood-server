@@ -61,6 +61,40 @@ const updateConversation = async (
   }
 };
 
+
+// create and update conversation
+const createConversation = async (req, res) => {
+  const {
+    senderId,
+    receiverId,
+    lastMessageText,
+    senderName,
+    senderAvatar,
+    receiverName,
+    receiverAvatar,
+  } = req.body;
+
+  try {
+    const response = await updateConversation(
+      senderId,
+      receiverId,
+      lastMessageText,
+      senderName,
+      senderAvatar,
+      receiverName,
+      receiverAvatar
+    );
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "Error processing your request",
+      error: error.message,
+    });
+  }
+};
+
+
 // Get all messages and conversation
 const getConversationsAndMessages = async (req, res) => {
   const { userId } = req.params;
@@ -99,4 +133,7 @@ const getConversationsAndMessages = async (req, res) => {
     });
   }
 };
-module.exports = { updateConversation, getConversationsAndMessages };
+
+
+
+module.exports = {getConversationsAndMessages,createConversation };
