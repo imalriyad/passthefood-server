@@ -11,4 +11,4 @@ router.get("/get-all-users", getAllUsers);
 router.get("/get-current-user", getCurrentUser);
 
 module.exports = router;
-module.exports = router;
+

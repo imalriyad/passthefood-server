@@ -5,8 +5,12 @@ const cookieParser = require("cookie-parser");
 const app = express();
 const port = process.env.PORT || 5000;
 const connectDB = require("./config/db");
+
+// Routes
 const donationRoute = require("./routes/donationRoute");
 const userRoute = require("./routes/userRoute");
+const messageRoute = require("./routes/messageRoute");
+
 const http = require("http");
 const { Server } = require("socket.io");
 const server = http.createServer(app);
@@ -18,8 +22,6 @@ const io = new Server(server, {
   },
 });
 
-
-
 // Middleware
 app.use(cors());
 app.use(express.json());
@@ -27,40 +29,44 @@ app.use(cookieParser());
 
 connectDB();
 
-app.use("/api/v1/", donationRoute, userRoute);
+app.use("/api/v1/", donationRoute, userRoute, messageRoute);
 
-
-
-
-
-
-
-// Real-time communication
 io.on("connection", (socket) => {
-  console.log(`User connected: ${socket.id}`);
+  console.log(`Socket connected: ${socket.id}`);
 
-  // Join a room based on user ID
+  // Join a room based on the user's MongoDB ID
   socket.on("joinRoom", (userId) => {
-    socket.join(userId);
-    console.log(`User ${userId} joined room ${userId}`);
+    if (userId) {
+      socket.join(userId); // Join room with MongoDB userId
+      console.log(`User with MongoDB ID ${userId} joined room ${userId}`);
+    } else {
+      console.error("User ID is missing. Unable to join room.");
+    }
   });
 
   // Handle sending messages
-  socket.on("sendMessage", (data) => {
-    const { senderId, receiverId, message } = data;
+  socket.on("sendMessage", async (data) => {
+    const { senderId, receiverId, text, time, avatar, senderName } = data;
 
-    // Emit the message to the receiver
-    io.to(receiverId).emit("receiveMessage", {
-      senderId,
-      message,
-      timestamp: new Date(),
-    });
-    console.log(`Message from ${senderId} to ${receiverId}: ${message}`);
+    if (receiverId) {
+      io.to(receiverId).emit("receiveMessage", {
+        senderId,
+        text,
+        time,
+        avatar,
+        senderName,
+        receiverId,
+      });
+
+     
+    } else {
+      console.error("Receiver ID is missing. Message not sent.");
+    }
   });
 
   // Handle disconnection
   socket.on("disconnect", () => {
-    console.log(`User disconnected: ${socket.id}`);
+    console.log(`Socket disconnected: ${socket.id}`);
   });
 });
 

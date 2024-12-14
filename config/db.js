@@ -7,7 +7,7 @@ const clientOptions = { serverApi: { version: '1', strict: true, deprecationErro
 async function connectDB() {
   try {
     await mongoose.connect(uri, clientOptions)
-    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+    console.log("Successfully connected to MongoDB!");
   } catch(error){
         console.log(error);
   }
