@@ -10,6 +10,8 @@ const updateConversation = async (
   receiverName,
   receiverAvatar
 ) => {
+
+  
   try {
     let existingConversation = await Conversation.findOne({
       $and: [
@@ -25,8 +27,18 @@ const updateConversation = async (
     } else {
       const newConversation = new Conversation({
         participants: [
-          { userId: senderId, name: senderName, avatar: senderAvatar },
-          { userId: receiverId, name: receiverName, avatar: receiverAvatar },
+          {
+            userId: senderId,
+            name: senderName,
+            avatar: senderAvatar,
+            isReciver: false,
+          },
+          {
+            userId: receiverId,
+            name: receiverName,
+            avatar: receiverAvatar,
+            isReciver: true,
+          },
         ],
         lastMessage: lastMessageText,
         lastMessageTime: Date.now(),
@@ -61,7 +73,6 @@ const updateConversation = async (
   }
 };
 
-
 // create and update conversation
 const createConversation = async (req, res) => {
   const {
@@ -93,7 +104,6 @@ const createConversation = async (req, res) => {
     });
   }
 };
-
 
 // Get all messages and conversation
 const getConversationsAndMessages = async (req, res) => {
@@ -134,6 +144,4 @@ const getConversationsAndMessages = async (req, res) => {
   }
 };
 
-
-
-module.exports = {getConversationsAndMessages,createConversation };
+module.exports = { getConversationsAndMessages, createConversation };

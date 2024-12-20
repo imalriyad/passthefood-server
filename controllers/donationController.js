@@ -55,7 +55,6 @@ const createDonation = async (req, res) => {
 const getAllListedFood = async (req, res) => {
   try {
     const { page = 1, limit = 10 } = req.query;
-
     const donations = await Donation.find()
       .skip((page - 1) * limit)
       .limit(limit);

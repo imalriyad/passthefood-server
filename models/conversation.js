@@ -16,6 +16,10 @@ const conversationSchema = new mongoose.Schema({
         type: String,
         default: "",
       },
+      isReciver: {
+        type: Boolean,
+        required: true,
+      },
     },
   ],
   lastMessage: {
