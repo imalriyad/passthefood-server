@@ -20,7 +20,10 @@ const io = new Server(server, {
     origin: "http://localhost:5173",
     methods: ["GET", "POST"],
   },
+  pingTimeout: 60000,
+  pingInterval: 25000, 
 });
+
 
 // Middleware
 app.use(cors());
