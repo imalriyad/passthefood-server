@@ -127,7 +127,7 @@ const getConversationsAndMessages = async (req, res) => {
 
     const messages = await Message.find({
       conversationId: { $in: conversationIds },
-    }).sort({ time: -1 });
+    }).sort({ time: 1 });
 
     res.status(200).json({
       success: true,
