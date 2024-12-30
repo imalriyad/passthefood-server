@@ -19,8 +19,6 @@ const createDonation = async (req, res) => {
       donorAvatar
     } = req.body;
 
-
-
     const newDonation = new Donation({
       foodName,
       foodValue,
@@ -69,21 +67,45 @@ const getAllListedFood = async (req, res) => {
 };
 
 
+
+// Update a donation to mark it as distributed
+const distribute = async (req, res) => {
+  const donationId = req.params.id;
+
+  try {
+    const updatedDonation = await Donation.findByIdAndUpdate(
+      donationId,
+      { distributed: true }, 
+      { new: true } 
+    );
+
+    if (!updatedDonation) {
+      return res.status(404).json({ status: 404, message: 'Donation not found' });
+    }
+
+    res.status(200).json({ status: 200, message: 'Donation marked as distributed'});
+  } catch (error) {
+    res.status(500).json({ status: 500, message: 'Internal server error', error });
+  }
+}
+
+
+
 // For only notifition
 const getLatestFoodNotifications = async (req, res) => {
   try {
     const latestFoods = await Donation.find(
       {},
       {
-        createdAt: 1, // Use createdAt instead of timestamp
+        createdAt: 1, 
         donorName: 1,
         donorAvatar: 1,
         instructions: 1,
-        _id: 0, // Exclude the _id field
+        _id: 0, 
       }
     )
-      .sort({ createdAt: -1 }) // Sort by latest createdAt
-      .limit(5); // Limit to the latest 5
+      .sort({ createdAt: -1 }) 
+      .limit(5); 
 
     res.status(200).json(latestFoods);
   } catch (error) {
@@ -95,4 +117,5 @@ module.exports = {
   createDonation,
   getAllListedFood,
   getLatestFoodNotifications,
+  distribute
 };

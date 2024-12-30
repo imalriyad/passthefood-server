@@ -54,6 +54,9 @@ const donationSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    distributed:{
+      type: Boolean,
+    }
   },
   {
     timestamps: true,
