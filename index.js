@@ -1,4 +1,4 @@
-require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
 const jwt = require('jsonwebtoken')
@@ -74,8 +74,6 @@ io.on("connection", (socket) => {
     console.log(`Socket disconnected: ${socket.id}`);
   });
 });
-
-
 
 
 app.get("/", (req, res) => {
