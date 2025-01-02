@@ -1,6 +1,7 @@
+require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config();
+const jwt = require('jsonwebtoken')
 const cookieParser = require("cookie-parser");
 const app = express();
 const port = process.env.PORT || 5000;
@@ -34,6 +35,7 @@ connectDB();
 
 app.use("/api/v1/", donationRoute, userRoute, messageRoute);
 
+// inital socket conection setup
 io.on("connection", (socket) => {
   console.log(`Socket connected: ${socket.id}`);
 
@@ -73,15 +75,24 @@ io.on("connection", (socket) => {
   });
 });
 
-server.listen(3000, () => {
-  console.log("Socket.io server running on http://localhost:3000");
-});
+
+app.post('/api/v1/auth',(req,res)=>{
+    const {email} = req.body;
+    try {
+      const token = jwt.sign({ email }, process.env.SECRETKEY, {
+        expiresIn: '10d',
+      });
+      res.status(200).json({ success: true, token }); 
+    } catch (error) {
+      res.status(500).json({ success: false, message: 'Error generating token' });
+    }
+  });
 
 app.get("/", (req, res) => {
   res.send({ message: "passthefood server running..." });
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log("passthefood server running on port", port);
 });
 
