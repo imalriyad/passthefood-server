@@ -82,4 +82,17 @@ const getCurrentUser = async (req, res) => {
   }
 };
 
-module.exports = { createUser, getAllUsers, getCurrentUser };
+
+const auth = (req,res)=>{
+  const {email} = req.body;
+  try {
+    const token = jwt.sign({ email }, process.env.SECRETKEY, {
+      expiresIn: '10d',
+    });
+    res.status(200).json({ success: true, token }); 
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Error generating token' });
+  }
+};
+
+module.exports = { createUser, getAllUsers, getCurrentUser,auth };

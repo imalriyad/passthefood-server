@@ -76,17 +76,7 @@ io.on("connection", (socket) => {
 });
 
 
-app.post('/api/v1/auth',(req,res)=>{
-    const {email} = req.body;
-    try {
-      const token = jwt.sign({ email }, process.env.SECRETKEY, {
-        expiresIn: '10d',
-      });
-      res.status(200).json({ success: true, token }); 
-    } catch (error) {
-      res.status(500).json({ success: false, message: 'Error generating token' });
-    }
-  });
+
 
 app.get("/", (req, res) => {
   res.send({ message: "passthefood server running..." });
