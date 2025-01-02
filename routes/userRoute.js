@@ -10,7 +10,7 @@ const {
 router.post("/registration", createUser);
 router.get("/get-all-users", getAllUsers);
 router.get("/get-current-user", getCurrentUser);
-router.post('/auth', auth)
+router.post('/authentication', auth)
 
 module.exports = router;
 
